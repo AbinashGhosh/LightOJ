@@ -19,7 +19,7 @@
 using  namespace  std;
 
 #define PI acos(-1.0)
-#define MAX 30005
+#define MAX 10000007
 #define EPS 1e-9
 
 #define mem(a,b) memset(a,b,sizeof(a))
@@ -49,62 +49,51 @@ typedef  vector <ll > vl;
 //int dy[]={0,1,1, 1, 0,-1,-1,-1};//8 direction
 //int dx[]={2,1,-1,-2,-2,-1, 1, 2};
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
-
-vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
-{
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
-    for(int i=0;i<edge[u].size();i++)
-    {
-        if(vt[edge[u][i]]==0)
-        {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
-            {
-                ans1=ans;
-                ans=temp;
-            }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
-        }
-    }
-   // best=min(ans+ans1,best);
-    return ans;
-}
 int main()
 {
     //READ("in.txt");
     //WRITE("out.txt");
-    int T,u,v,n,w;
+    int T,n,a[200],b[200],v[200];
     scanf("%d",&T);
     FOR(t,1,T)
     {
+        int count=0,carry=0,j;
         scanf("%d",&n);
-        FOR(i,1,n-1)
+        mem(v,0);
+        FOR(i,0,n-1)
+            scanf("%d",&a[i]);
+        FOR(i,0,n-1)
+            scanf("%d",&b[i]);
+        sort(a,a+n);
+        sort(b,b+n);
+        FOR(j,0,n-1)
         {
-            scanf("%d%d%d",&u,&v,&w);
-            edge[u].pb(v);
-            edge[v].pb(u);
-            cost[v].pb(w);
-            cost[u].pb(w);
+            for(int i=n-1;i>=0;i--)
+            {
+                if(b[i]<a[j]&&b[i]!=0)
+                {
+                    a[j]=0;
+                    b[i]=0;
+                    count+=2;
+                    break;
+                }
+            }
         }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
-        printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
-        edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
+        FOR(j,0,n-1)
+        {
+            for(int i=n-1;i>=0;i--)
+            {
+                if(b[i]==a[j]&&b[i]!=0)
+                {
+                    a[j]=0;
+                    b[i]=0;
+                    count+=1;
+                    break;
+                }
+            }
         }
+        printf("Case %d: %d\n",t,count);
     }
-     return 0;
+    return 0;
 }
 

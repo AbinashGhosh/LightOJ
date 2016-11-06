@@ -1,3 +1,8 @@
+// 2nd way
+//    DFS from node '0' (or any other node) to find the farthest node from '0'. Call it 'u'
+//    DFS from node 'u' to find the farthest node from 'u'. Call it 'v'
+//    The distance from 'u' to 'v' is the maximum distance in the tree.
+
 #include <cstdio>
 #include <cstdlib>
 #include <cctype>
@@ -51,31 +56,24 @@ typedef  vector <ll > vl;
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
 
 vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
+int dist[MAX],best,bnode;
+
+void DFS_visit(int u)
 {
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
     for(int i=0;i<edge[u].size();i++)
     {
-        if(vt[edge[u][i]]==0)
+        int v=edge[u][i];
+        if(dist[v]<0)
         {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
+            dist[v]=dist[u]+cost[u][i];
+            if(best<dist[v])
             {
-                ans1=ans;
-                ans=temp;
+                best=dist[v];
+                bnode=v;
             }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
+            DFS_visit(v);
         }
     }
-   // best=min(ans+ans1,best);
-    return ans;
 }
 int main()
 {
@@ -94,17 +92,18 @@ int main()
             cost[v].pb(w);
             cost[u].pb(w);
         }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
+        mem(dist,-1);
+        dist[0]=0,best=0;
+        DFS_visit(0);
+        mem(dist,-1);
+        dist[bnode]=0,best=0;
+        DFS_visit(bnode);
         printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
-        edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
+        FOR(i,0,n-1)
+        {
+            edge[i].clear();
+            cost[i].clear();
         }
     }
-     return 0;
+    return 0;
 }
-

@@ -19,7 +19,7 @@
 using  namespace  std;
 
 #define PI acos(-1.0)
-#define MAX 30005
+#define MAX 10000007
 #define EPS 1e-9
 
 #define mem(a,b) memset(a,b,sizeof(a))
@@ -50,61 +50,58 @@ typedef  vector <ll > vl;
 //int dx[]={2,1,-1,-2,-2,-1, 1, 2};
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
 
-vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
+int k,m,n;
+int person[102],vt[1005],indeg[1005];
+vi edge[1005];
+void DFS_visit(int u)
 {
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
+    vt[u]=1;
+    //pr(u);
     for(int i=0;i<edge[u].size();i++)
     {
-        if(vt[edge[u][i]]==0)
+        int v=edge[u][i];
+        if(vt[v]==0)
         {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
-            {
-                ans1=ans;
-                ans=temp;
-            }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
+            DFS_visit(v);
         }
     }
-   // best=min(ans+ans1,best);
-    return ans;
 }
 int main()
 {
     //READ("in.txt");
     //WRITE("out.txt");
-    int T,u,v,n,w;
+    int T,u,v;
     scanf("%d",&T);
     FOR(t,1,T)
     {
-        scanf("%d",&n);
-        FOR(i,1,n-1)
+        scanf("%d%d%d",&k,&n,&m);
+        FOR(i,1,k)
+        scanf("%d",&person[i]);
+        FOR(i,1,m)
         {
-            scanf("%d%d%d",&u,&v,&w);
+            scanf("%d%d",&u,&v);
             edge[u].pb(v);
-            edge[v].pb(u);
-            cost[v].pb(w);
-            cost[u].pb(w);
         }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
-        printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
+        int ans=n+1;
+        FOR(i,1,k)
+        {
+            int count=0;
+            mem(vt,0);
+            DFS_visit(person[i]);
+            FOR(j,1,n)
+            {
+                if(vt[j])
+                {
+                    count++;
+                }
+            }
+            //pr(count);
+            ans=min(ans,count);
+        }
+        printf("Case %d: %d\n",t,ans);
+        FOR(i,0,n)
         edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
-        }
     }
-     return 0;
+    return 0;
 }
 

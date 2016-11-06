@@ -19,7 +19,7 @@
 using  namespace  std;
 
 #define PI acos(-1.0)
-#define MAX 30005
+#define MAX 10000007
 #define EPS 1e-9
 
 #define mem(a,b) memset(a,b,sizeof(a))
@@ -43,68 +43,85 @@ typedef  vector <int> vi;
 typedef  vector <pii> vpii;
 typedef  vector <ll > vl;
 
-//int dx[]={1,0,-1,0};
-//int dy[]={0,1,0,-1}; //4 Direction
+int dx[]={1,0,-1,0};
+int dy[]={0,1,0,-1}; //4 Direction
 //int dx[]={1,1,0,-1,-1,-1, 0, 1};
 //int dy[]={0,1,1, 1, 0,-1,-1,-1};//8 direction
 //int dx[]={2,1,-1,-2,-2,-1, 1, 2};
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
-
-vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
+int T,row,col,ix,iy,cnt;
+char g[22][22];
+bool v[22][22];
+void DFS_visit(int r,int c)
 {
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
-    for(int i=0;i<edge[u].size();i++)
-    {
-        if(vt[edge[u][i]]==0)
-        {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
-            {
-                ans1=ans;
-                ans=temp;
-            }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
-        }
-    }
-   // best=min(ans+ans1,best);
-    return ans;
+    if(row<=r||r<0||col<=c||c<0||g[r][c]=='#'||v[r][c])return;
+    cnt++;
+    v[r][c]=true;
+    FOR(i,0,3)
+        DFS_visit(r+dx[i],c+dy[i]);
+    return;
 }
 int main()
 {
     //READ("in.txt");
     //WRITE("out.txt");
-    int T,u,v,n,w;
     scanf("%d",&T);
     FOR(t,1,T)
     {
-        scanf("%d",&n);
-        FOR(i,1,n-1)
+        scanf("%d%d",&col,&row);
+        mem(v,false);
+        FOR(i,0,row-1)
         {
-            scanf("%d%d%d",&u,&v,&w);
-            edge[u].pb(v);
-            edge[v].pb(u);
-            cost[v].pb(w);
-            cost[u].pb(w);
+            getchar();
+            FOR(j,0,col-1)
+            {
+               scanf("%c",&g[i][j]);
+               if(g[i][j]=='@')
+                ix=i,iy=j;
+            }
         }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
-        printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
-        edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
-        }
+        cnt=0;
+        //pr2(ix,iy);
+        DFS_visit(ix,iy);
+        printf("Case %d: %d\n",t,cnt);
     }
-     return 0;
+    return 0;
 }
-
+/*
+4
+6 9
+....#.
+.....#
+......
+......
+......
+......
+......
+#@...#
+.#..#.
+11 9
+.#.........
+.#.#######.
+.#.#.....#.
+.#.#.###.#.
+.#.#..@#.#.
+.#.#####.#.
+.#.......#.
+.#########.
+...........
+11 6
+..#..#..#..
+..#..#..#..
+..#..#..###
+..#..#..#@.
+..#..#..#..
+..#..#..#..
+7 7
+..#.#..
+..#.#..
+###.###
+...@...
+###.###
+..#.#..
+..#.#..
+*/

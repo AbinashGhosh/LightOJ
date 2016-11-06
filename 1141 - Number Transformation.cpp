@@ -19,7 +19,7 @@
 using  namespace  std;
 
 #define PI acos(-1.0)
-#define MAX 30005
+#define MAX 10000007
 #define EPS 1e-9
 
 #define mem(a,b) memset(a,b,sizeof(a))
@@ -49,62 +49,35 @@ typedef  vector <ll > vl;
 //int dy[]={0,1,1, 1, 0,-1,-1,-1};//8 direction
 //int dx[]={2,1,-1,-2,-2,-1, 1, 2};
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
-
-vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
-{
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
-    for(int i=0;i<edge[u].size();i++)
-    {
-        if(vt[edge[u][i]]==0)
-        {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
-            {
-                ans1=ans;
-                ans=temp;
-            }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
-        }
-    }
-   // best=min(ans+ans1,best);
-    return ans;
-}
+vi edge[55];
+int vt[55];
 int main()
 {
     //READ("in.txt");
     //WRITE("out.txt");
-    int T,u,v,n,w;
+    int T;
     scanf("%d",&T);
     FOR(t,1,T)
     {
-        scanf("%d",&n);
-        FOR(i,1,n-1)
+        scanf("%d%d",&s,&n);
+        int tem=s;
+        vi pf;
+        pf.pb(0);
+        FOR(i,2,s/2+1)
         {
-            scanf("%d%d%d",&u,&v,&w);
-            edge[u].pb(v);
-            edge[v].pb(u);
-            cost[v].pb(w);
-            cost[u].pb(w);
+            if(tem==0)break;
+            if(tem%i==0)
+            {
+                pf.pb(i);
+                while(tem%i==0)
+                {
+                    tem/=i;
+                }
+            }
         }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
-        printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
-        edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
-        }
+        for(int i=)
     }
-     return 0;
+    return 0;
 }
+
 

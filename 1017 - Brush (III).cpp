@@ -19,7 +19,7 @@
 using  namespace  std;
 
 #define PI acos(-1.0)
-#define MAX 30005
+#define MAX 10000007
 #define EPS 1e-9
 
 #define mem(a,b) memset(a,b,sizeof(a))
@@ -49,62 +49,36 @@ typedef  vector <ll > vl;
 //int dy[]={0,1,1, 1, 0,-1,-1,-1};//8 direction
 //int dx[]={2,1,-1,-2,-2,-1, 1, 2};
 //int dy[]={1,2, 2, 1,-1,-2,-2,-1};//Knight Direction
-
-vi edge[MAX],cost[MAX];
-int vt[MAX],best;
-int DFS_visit(int u)
+int n,w,k,pos[105],dp[105][105];
+int solve(int pnt,int moves)
 {
-    //pr2(u,chk);
-    int ans=0,ans1=0,temp;
-    for(int i=0;i<edge[u].size();i++)
+    if(pnt>=n||moves==0) return 0;
+    if(dp[pnt][moves]!=-1)return dp[pnt][moves];
+    int p=0;
+    FOR(i,pnt,n-1)
     {
-        if(vt[edge[u][i]]==0)
-        {
-            vt[edge[u][i]]=1;
-            temp=cost[u][i]+DFS_visit(edge[u][i]);
-           // pr(temp);
-            if(ans<=temp)
-            {
-                ans1=ans;
-                ans=temp;
-            }
-            else if(ans1<temp)
-                ans1=temp;
-            //pr2(ans,ans1);
-            best=max(ans+ans1,best);
-        }
+        if(pos[i]>pos[pnt]+w)break;
+        p++;
     }
-   // best=min(ans+ans1,best);
-    return ans;
+    int ans= max(p+solve(pnt+p,moves-1),solve(pnt+1,moves));
+    return dp[pnt][moves]=ans;
 }
 int main()
 {
     //READ("in.txt");
     //WRITE("out.txt");
-    int T,u,v,n,w;
+    int T;
     scanf("%d",&T);
     FOR(t,1,T)
     {
-        scanf("%d",&n);
-        FOR(i,1,n-1)
-        {
-            scanf("%d%d%d",&u,&v,&w);
-            edge[u].pb(v);
-            edge[v].pb(u);
-            cost[v].pb(w);
-            cost[u].pb(w);
-        }
-        int ans=0;
-        best=0;
-        vt[0]=1;
-        ans=DFS_visit(0);
-        printf("Case %d: %d\n",t,best);
-        FOR(i,0,n-1){
-        edge[i].clear();
-        cost[i].clear();
-        vt[i]=0;
-        }
+        scanf("%d%d%d",&n,&w,&k);
+        mem(dp,-1);
+        FOR(i,0,n-1)
+            scanf("%*d%d",&pos[i]);
+        sort(pos,pos+n);
+        int ans=solve(0,k);
+        printf("Case %d: %d\n",t,ans);
     }
-     return 0;
+    return 0;
 }
 
